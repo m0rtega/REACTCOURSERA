@@ -1,39 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardImg, CardImgOverlay, CardText, CardBody,
     CardTitle } from 'reactstrap';
-import DishDetail from './DishDetailComponent';
 
-
+//Functional component
 const Menu = (props) => {
 
-    const [selectedDish, setSelectedDish] = useState(null);
-
-    function onDishSelect(dish){
-        setSelectedDish(dish);
-    };
-
-    function renderDish(dish){
-        if (dish != null)
-            return(
-                <Card>
-                    <CardImg top src={dish.image} alt={dish.name} />
-                    <CardBody>
-                      <CardTitle>{dish.name}</CardTitle>
-                      <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>
-            );
-        else
-            return(
-                <div></div>
-            );
-    }
-
+    //menu variable that maps and renders the images and "buttons" of the dishes array
     const menu = props.dishes.map((dish, index) => {
         return(
             <div key={index} className="col-12 col-md-5 m-1">
                 <Card key={dish.id}
-                  onClick={() => onDishSelect(dish)}>
+                  onClick={() => props.onClick(dish.id)}>
                   <CardImg width="100%" src={dish.image} alt={dish.name} />
                   <CardImgOverlay>
                       <CardTitle>{dish.name}</CardTitle>
@@ -43,12 +20,14 @@ const Menu = (props) => {
         )
     });
 
+    //What is rendered in the DishDetailsComponent
+    //Notice how the DishDetail component is being used and the selectedDish
+    //state variable is being passed as a prop
     return(
         <div className="container">
             <div className="row">
                     {menu}
             </div>
-            <DishDetail dish={selectedDish}/>
         </div>
     )
 }
