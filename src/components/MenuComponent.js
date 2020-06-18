@@ -1,35 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardImg, CardImgOverlay, CardText, CardBody,
+import React from "react";
+import { Card, CardImg, CardImgOverlay,
     CardTitle } from 'reactstrap';
 
-//Functional component
-const Menu = (props) => {
+    const  RenderMenuItem = ({dish, onClick}) => {
+        return (
+            <Card
+                onClick={() => onClick(dish.id)}>
+                <CardImg width="100%" src={dish.image} alt={dish.name} />
+                <CardImgOverlay>
+                    <CardTitle>{dish.name}</CardTitle>
+                </CardImgOverlay>
+            </Card>
+        );
+    }
 
-    //menu variable that maps and renders the images and "buttons" of the dishes array
-    const menu = props.dishes.map((dish, index) => {
-        return(
-            <div key={index} className="col-12 col-md-5 m-1">
-                <Card key={dish.id}
-                  onClick={() => props.onClick(dish.id)}>
-                  <CardImg width="100%" src={dish.image} alt={dish.name} />
-                  <CardImgOverlay>
-                      <CardTitle>{dish.name}</CardTitle>
-                  </CardImgOverlay>
-                </Card>
-            </div>
-        )
-    });
+    const Menu = (props) => {
 
-    //What is rendered in the DishDetailsComponent
-    //Notice how the DishDetail component is being used and the selectedDish
-    //state variable is being passed as a prop
-    return(
-        <div className="container">
-            <div className="row">
+        const menu = props.dishes.map((dish) => {
+            return (
+                <div className="col-12 col-md-5 m-1"  key={dish.id}>
+                    <RenderMenuItem dish={dish} onClick={props.onClick} />
+                </div>
+            );
+        });
+
+        return (
+            <div className="container">
+                <div className="row">
                     {menu}
+                </div>
             </div>
-        </div>
-    )
-}
+        );
+    }
 
 export default Menu;
