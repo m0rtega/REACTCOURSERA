@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import Menu from './MenuComponent';
 import DishDetail from './DishDetailComponent';
-import { DISHES } from '../shared/dishes';
-import { COMMENTS } from '../shared/comments';
-import { LEADERS } from '../shared/leaders';
-import { PROMOTIONS } from '../shared/promotions';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Contact from './ContactComponent';
 import Home from './HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Main = () => {
 
-  const [dishes, setDishes] = useState(DISHES);
-  const [comments, setComments] = useState(COMMENTS);
-  const [promotions, setPromotions] = useState(PROMOTIONS);
-  const [leaders, setLeaders] = useState(LEADERS);
+  const dishes = useSelector(state => state.dishes);
+  const comments = useSelector(state => state.comments);
+  const promotions = useSelector(state => state.promotions);
+  const leaders = useSelector(state => state.leaders);
 
   const HomePage = () => {
       return(
