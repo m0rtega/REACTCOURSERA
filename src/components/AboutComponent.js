@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 //The RenderLeader method that receives the leader as a parameter and displays their details.
 const RenderLeader = ({leader}) => {
-    console.log(leader);
     //As seen here, we use the Media Bootstrap component to display the leader.
     return(
         <Media tag="li">
