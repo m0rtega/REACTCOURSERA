@@ -8,13 +8,18 @@ import Home from './HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { addComment } from '../redux/ActionCreators';
 
 const Main = () => {
+
+  const dispatch = useDispatch();
 
   const dishes = useSelector(state => state.dishes);
   const comments = useSelector(state => state.comments);
   const promotions = useSelector(state => state.promotions);
   const leaders = useSelector(state => state.leaders);
+
+  const add_Comment = (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment));
 
   const HomePage = () => {
       return(
@@ -27,7 +32,9 @@ const Main = () => {
   const DishWithId = ({match}) => {
     return(
       <DishDetail dish={dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
-      comments={comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} />
+      comments={comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
+      add_Comment={add_Comment}
+      />
     )
   }
 

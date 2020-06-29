@@ -24,7 +24,7 @@ function RenderDish({dish}){
 
 //render method for mapping the comments of the dish
 //the header is being used, as well as two lines for the comment and author/date
-function RenderComments({comments}){
+function RenderComments({comments, add_Comment, dishId}){
     if(comments != null){
         return(
             <>
@@ -40,7 +40,7 @@ function RenderComments({comments}){
                 })}
             </div>
             {/*We insert the CommentForm in the RenderComments to show the Modal with the Form. Toggled by a button.*/}
-            <CommentForm />
+            <CommentForm dishId={dishId} add_Comment={add_Comment} />
             </>
         )
     } else {
@@ -63,8 +63,8 @@ const CommentForm = (props) => {
 
     //The function that handles the submit for the form. Currently it doesnt do much.
     const handleSubmit = (values) => {
-        console.log('Current State is: ' + JSON.stringify(values));
-        alert('Current State is: ' + JSON.stringify(values));
+        toggleModal();
+        props.add_Comment(props.dishId, values.rating, values.author, values.comment);
     }
 
     //The function that toggles the modal. For some reason, if not done this way
@@ -92,12 +92,13 @@ const CommentForm = (props) => {
                     <Row className="form-group">
                         <Col md={10}>
                             <Label htmlFor="rating" md={2}>Rating</Label>
-                            <Control.select model=".rating" name="rating">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                            <Control.select model=".rating" id="rating" name="rating">
+                                <option value={null}>-Choose a value-</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
                             </Control.select>
                         </Col>
                     </Row>
@@ -176,7 +177,9 @@ const DishDetail = (props) => {
                     <RenderDish dish={props.dish} />
                 </div>
                 <div className="col-12 col-md-5 m-1">
-                    <RenderComments comments={props.comments} />
+                    <RenderComments comments={props.comments} 
+                    add_Comment={props.add_Comment}
+                    dishId={props.dish.id}/>
                 </div>
             </div>
             </div>
