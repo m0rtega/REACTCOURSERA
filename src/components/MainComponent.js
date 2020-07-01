@@ -9,6 +9,7 @@ import About from './AboutComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment, fetchDishes } from '../redux/ActionCreators';
+import { actions } from 'react-redux-form';
 
 const Main = () => {
 
@@ -21,6 +22,7 @@ const Main = () => {
 
   const add_Comment = (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment));
   const fetch_Dishes = () => {dispatch(fetchDishes())};
+  const resetFeedbackForm = () => {dispatch(actions.reset('feedback'));}
 
   useEffect(() => {fetch_Dishes()}, []);
 
@@ -53,7 +55,7 @@ const Main = () => {
             <Route path="/home" component={HomePage} />
             <Route exact path="/menu" component={() => <Menu dishes={dishes} />} />
             <Route path="/menu/:dishId" component={DishWithId} />
-            <Route exact path="/contactus" component={Contact} />
+            <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={resetFeedbackForm}/>} />
             {/*Here is where I implement the new AboutComponent, using the router and passing the leaders.*/}
             <Route exact path="/aboutus" component={() => <About leaders={leaders} />} />          
             <Redirect to="/home" />
