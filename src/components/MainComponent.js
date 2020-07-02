@@ -8,7 +8,7 @@ import Home from './HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, fetchDishes } from '../redux/ActionCreators';
+import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 const Main = () => {
@@ -23,15 +23,19 @@ const Main = () => {
   const add_Comment = (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment));
   const fetch_Dishes = () => {dispatch(fetchDishes())};
   const resetFeedbackForm = () => {dispatch(actions.reset('feedback'));}
+  const fetch_Comments = () => {dispatch(fetchComments())};
+  const fetch_Promos = () => {dispatch(fetchPromos())};
 
-  useEffect(() => {fetch_Dishes()}, []);
+  useEffect(() => {fetch_Dishes(); fetch_Comments(); fetch_Promos(); }, []);
 
   const HomePage = () => {
       return(
           <Home dish={dishes.dishes.filter((dish) => dish.featured)[0]} comments={comments}
           dishesLoading={dishes.isLoading}
           dishesErrMess={dishes.errMess}
-          promotion={promotions.filter((promotion) => promotion.featured)[0]}
+          promotion={promotions.promotions.filter((promotion) => promotion.featured)[0]}
+          promoErrMess={promotions.errMess}
+          promoLoading={promotions.isLoading}
           leader={leaders.filter((leader) => leader.featured)[0]}/>
       )
   }
@@ -41,7 +45,8 @@ const Main = () => {
       <DishDetail dish={dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
         isLoading={dishes.isLoading}
         errMess={dishes.errMess}
-        comments={comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
+        comments={comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
+        commentErrMess={comments.errMess}
         add_Comment={add_Comment}
       />
     )
