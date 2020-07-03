@@ -8,10 +8,11 @@ import Home from './HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
+import { postComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-const Main = () => {
+const Main = (props) => {
 
   const dispatch = useDispatch();
 
@@ -20,11 +21,11 @@ const Main = () => {
   const promotions = useSelector(state => state.promotions);
   const leaders = useSelector(state => state.leaders);
 
-  const add_Comment = (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment));
   const fetch_Dishes = () => {dispatch(fetchDishes())};
   const resetFeedbackForm = () => {dispatch(actions.reset('feedback'));}
   const fetch_Comments = () => {dispatch(fetchComments())};
   const fetch_Promos = () => {dispatch(fetchPromos())};
+  const post_Comment = (dishId, rating, author, comment) => {dispatch(postComment(dishId, rating, author, comment))}
 
   useEffect(() => {fetch_Dishes(); fetch_Comments(); fetch_Promos(); }, []);
 
@@ -47,7 +48,7 @@ const Main = () => {
         errMess={dishes.errMess}
         comments={comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
         commentErrMess={comments.errMess}
-        add_Comment={add_Comment}
+        post_Comment={post_Comment}
       />
     )
   }
@@ -56,15 +57,19 @@ const Main = () => {
   return(
     <div className="App">
         <Header />
-        <Switch>
-            <Route path="/home" component={HomePage} />
-            <Route exact path="/menu" component={() => <Menu dishes={dishes} />} />
-            <Route path="/menu/:dishId" component={DishWithId} />
-            <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={resetFeedbackForm}/>} />
-            {/*Here is where I implement the new AboutComponent, using the router and passing the leaders.*/}
-            <Route exact path="/aboutus" component={() => <About leaders={leaders} />} />          
-            <Redirect to="/home" />
-        </Switch>
+        <TransitionGroup>
+          <CSSTransition key={Location.key} classNames="page" timeout={300}>
+            <Switch>
+                <Route path="/home" component={HomePage} />
+                <Route exact path="/menu" component={() => <Menu dishes={dishes} />} />
+                <Route path="/menu/:dishId" component={DishWithId} />
+                <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={resetFeedbackForm}/>} />
+                {/*Here is where I implement the new AboutComponent, using the router and passing the leaders.*/}
+                <Route exact path="/aboutus" component={() => <About leaders={leaders} />} />          
+                <Redirect to="/home" />
+            </Switch>
+          </CSSTransition>
+        </TransitionGroup>
         <Footer />
     </div>
   )

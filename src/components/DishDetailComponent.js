@@ -26,7 +26,7 @@ function RenderDish({dish}){
 
 //render method for mapping the comments of the dish
 //the header is being used, as well as two lines for the comment and author/date
-function RenderComments({comments, add_Comment, dishId}){
+function RenderComments({comments, post_Comment, dishId}){
     if(comments != null){
         return(
             <>
@@ -42,7 +42,7 @@ function RenderComments({comments, add_Comment, dishId}){
                 })}
             </div>
             {/*We insert the CommentForm in the RenderComments to show the Modal with the Form. Toggled by a button.*/}
-            <CommentForm dishId={dishId} add_Comment={add_Comment} />
+            <CommentForm dishId={dishId} post_Comment={post_Comment} />
             </>
         )
     } else {
@@ -66,7 +66,7 @@ const CommentForm = (props) => {
     //The function that handles the submit for the form. Currently it doesnt do much.
     const handleSubmit = (values) => {
         toggleModal();
-        props.add_Comment(props.dishId, values.rating, values.author, values.comment);
+        props.post_Comment(props.dishId, values.rating, values.author, values.comment);
     }
 
     //The function that toggles the modal. For some reason, if not done this way
@@ -195,7 +195,7 @@ const DishDetail = (props) => {
                     </div>
                     <div className="col-12 col-md-5 m-1">
                         <RenderComments comments={props.comments} 
-                        add_Comment={props.add_Comment}
+                        post_Comment={props.post_Comment}
                         dishId={props.dish.id}/>
                     </div>
                 </div>
